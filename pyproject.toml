@@ -1,0 +1,15 @@
+[project]
+name = "wisee"
+version = "0.1.0"
+description = "WiSee - Outil CLI légal de découverte simple du réseau local"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.3.1",
+    "rich>=14.3.3",
+    "scapy>=2.7.0",
+    "setuptools>=82.0.0",
+]
+
+[project.scripts]
+wisee = "wisee.cli:cli"

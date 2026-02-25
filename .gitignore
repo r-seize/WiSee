@@ -1,0 +1,51 @@
+# Build
+deb_dist/
+dist/
+build/
+*.egg-info/
+*.tar.gz
+htmlcov/
+.coverage
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Env
+.venv/
+venv/
+ENV/
+env.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store?
+
+# Test
+.pytest_cache/
+*.log
+
+# Package managers
+*.deb
+*.rpm
+*.whl
+
+# Test coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+
+dev.log
