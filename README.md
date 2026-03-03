@@ -18,9 +18,15 @@ Scan your local network in seconds. Discovers devices via ARP, enriches them wit
 ## Installation
 
 ### pipx (recommended)
+```bash
+curl -sSL https://raw.githubusercontent.com/r-seize/wisee/main/install.sh | bash
+```
+> This automatically creates the sudo symlink. `sudo wisee scan` works immediately.
 
+**Manual pipx install** (requires extra step):
 ```bash
 pipx install git+https://github.com/r-seize/wisee.git
+sudo ln -sf ~/.local/bin/wisee /usr/local/bin/wisee
 ```
 
 ### .deb (Debian / Ubuntu)
