@@ -90,6 +90,33 @@ wisee --help
   sudo setcap cap_net_raw+eip $(which python3)
   ```
 
+## Uninstall
+
+### pipx
+```bash
+pipx uninstall wisee
+sudo rm -f /usr/local/bin/wisee
+```
+
+### .deb
+```bash
+sudo dpkg -r wisee
+```
+
+### pip
+```bash
+pip uninstall wisee
+sudo rm -f /usr/local/bin/wisee
+```
+
+### From source
+```bash
+pipx uninstall wisee
+# or
+uv pip uninstall wisee
+sudo rm -f /usr/local/bin/wisee
+```
+
 ## About
 
 We’d like to thank everyone who contributed ideas, tested the tool, or provided feedback during development. Your support is greatly appreciated!
