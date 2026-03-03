@@ -16,7 +16,7 @@ echo "Building WiSee v${VERSION} .deb package..."
 echo "  Python version : ${PYTHON_VERSION}"
 echo "  Install site   : ${PYTHON_SITE}"
 
-# Clean
+# Clean previous build
 rm -rf deb_dist
 mkdir -p "${BUILD_DIR}/DEBIAN"
 mkdir -p "${BUILD_DIR}${PYTHON_SITE}"
@@ -26,8 +26,8 @@ mkdir -p "${BUILD_DIR}${INSTALL_PREFIX}/bin"
 cp -r src/wisee "${BUILD_DIR}${PYTHON_SITE}/"
 
 # Create the wisee wrapper script
-# sys.path.insert garantit que le module est trouvé même si le site-packages
-# n'est pas dans le path par défaut de python3 system
+# sys.path.insert ensures the module is found even if site-packages
+# is not in the default python3 system path
 cat > "${BUILD_DIR}${INSTALL_PREFIX}/bin/wisee" <<SCRIPT
 #!/usr/bin/env python3
 import sys
@@ -56,17 +56,20 @@ Description: Local network discovery tool
  Usage: sudo wisee scan
 EOF
 
-# DEBIAN/postinst — install Python deps if not present
+# DEBIAN/postinst — install Python dependencies after package install
 cat > "${BUILD_DIR}/DEBIAN/postinst" <<'EOF'
 #!/bin/bash
 set -e
+
+# Install Python dependencies
 pip3 install --quiet --break-system-packages scapy rich click 2>/dev/null || \
 pip3 install --quiet scapy rich click 2>/dev/null || true
-echo "WiSee installed. Run: sudo wisee scan"
+
+echo "WiSee installed successfully. Run: sudo wisee scan"
 EOF
 chmod 0755 "${BUILD_DIR}/DEBIAN/postinst"
 
-# Build
+# Build the .deb package
 dpkg-deb --build "${BUILD_DIR}" "deb_dist/${PACKAGE_NAME}_${VERSION}_all.deb"
 
 echo ""
