@@ -8,7 +8,7 @@
  ╚███╔███╔╝██║███████║███████╗███████╗
   ╚══╝╚══╝ ╚═╝╚══════╝╚══════╝╚══════╝
 ```
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/VOTRE-USERNAME/filegen/releases)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](https://github.com/VOTRE-USERNAME/filegen/releases)
 [![Python](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-GPL-orange.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)]()
@@ -28,13 +28,13 @@ pipx install git+https://github.com/r-seize/wisee.git
 Download the latest `.deb` from [Releases](https://github.com/r-seize/wisee/releases):
 
 ```bash
-sudo dpkg -i wisee_0.1.0_all.deb
+sudo dpkg -i wisee_0.1.1_all.deb
 ```
 
 ### tar.gz / pip
 
 ```bash
-pip install https://github.com/r-seize/wisee/releases/download/v0.1.0/wisee-0.1.0.tar.gz
+pip install https://github.com/r-seize/wisee/releases/download/v0.1.1/wisee-0.1.1.tar.gz
 ```
 
 ### From source

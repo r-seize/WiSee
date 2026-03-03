@@ -81,7 +81,7 @@ def _is_medium() -> bool:
 # Banner & config panel
 # ---------------------------------------------------------------------------
 
-def print_banner(version: str = "0.1.0") -> None:
+def print_banner(version: str = "0.1.1") -> None:
     console.print(Align.center(Text(BANNER, style="bold #00D4FF")))
     console.print(Align.center(Text(
         f"  Network discovery tool  |  v{version}  |  WiSee by r-seize\n",
