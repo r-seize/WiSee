@@ -174,6 +174,16 @@ def run_scan(
                     device.open_ports   = r.open_ports
 
     # =========================================================================
+    # Device classification + risk scoring (skipped in fast mode)
+    # =========================================================================
+    if not fast:
+        from .classifier import classify_device
+        from .risk import score_device
+        for device in devices:
+            device.device_type             = classify_device(device)
+            device.risk_score, device.risk_flags = score_device(device)
+
+    # =========================================================================
     # Display — one final table with everything merged in
     # =========================================================================
     total_elapsed = time.perf_counter() - start
