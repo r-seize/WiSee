@@ -32,6 +32,7 @@ from rich import box
 if TYPE_CHECKING:
     from .network import Device
     from .scanner import NmapResult
+    from .diff import DiffResult
 
 console = Console()
 
@@ -81,7 +82,7 @@ def _is_medium() -> bool:
 # Banner & config panel
 # ---------------------------------------------------------------------------
 
-def print_banner(version: str = "0.1.1") -> None:
+def print_banner(version: str = "0.1.2") -> None:
     console.print(Align.center(Text(BANNER, style="bold #00D4FF")))
     console.print(Align.center(Text(
         f"  Network discovery tool  |  v{version}  |  WiSee by r-seize\n",
@@ -180,6 +181,16 @@ def _os_str(d: "Device") -> str:
     return "-"
 
 
+def _risk_level_str(score: int) -> str:
+    if score <= 20:
+        return "[green]Low[/]"
+    if score <= 50:
+        return "[yellow]Medium[/]"
+    if score <= 80:
+        return "[red]High[/]"
+    return "[bold red]Critical[/]"
+
+
 def _ports_str(d: "Device") -> str:
     """Compact open ports list from nmap results."""
     if not d.open_ports:
@@ -211,30 +222,32 @@ def print_devices(devices: list["Device"], elapsed: float) -> None:
     s      = "s" if count != 1 else ""
 
     table = Table(
-        title=f"[{C_BRAND}]Local network  --  {count} device{s} detected[/]",
-        box=box.SIMPLE_HEAD,
-        border_style="#2D3748",
-        header_style=f"bold {C_BRAND}",
-        show_lines=False,
-        padding=(0, 1),
-        expand=True,
+        title           = f"[{C_BRAND}]Local network  --  {count} device{s} detected[/]",
+        box             = box.SIMPLE_HEAD,
+        border_style    = "#2D3748",
+        header_style    = f"bold {C_BRAND}",
+        show_lines      = False,
+        padding         = (0, 1),
+        expand          = True,
     )
 
     # Always present
-    table.add_column("#",        style="dim white",   width=3,  justify="right", no_wrap=True)
-    table.add_column("IP",       style=C_IP,           width=15, no_wrap=True)
-    table.add_column("Name",     style=C_HOST,          min_width=14, ratio=3)
-    table.add_column("Vendor",   min_width=12,          ratio=3)
+    table.add_column("#",        style      = "dim white",  width       = 3,  justify   = "right", no_wrap = True)
+    table.add_column("IP",       style      = C_IP,         width       = 15, no_wrap   = True)
+    table.add_column("Name",     style      = C_HOST,       min_width   = 14, ratio     = 3)
+    table.add_column("Vendor",   min_width  = 12,           ratio       = 3)
 
     # Medium+
     if medium:
-        table.add_column("MAC",  style=C_MAC,           width=17, no_wrap=True)
-        table.add_column("TTL",  style=C_TTL,           width=5,  justify="right", no_wrap=True)
-        table.add_column("OS",   style=C_OS,             min_width=20, ratio=2)
+        table.add_column("MAC",  style  = C_MAC,    width       = 17,   no_wrap     = True)
+        table.add_column("TTL",  style  = C_TTL,    width       = 5,    justify     = "right", no_wrap = True)
+        table.add_column("OS",   style  = C_OS,     min_width   = 20,   ratio       = 2)
+        table.add_column("Type",                    min_width   = 14,   ratio       = 2)
 
     # Wide only
     if wide:
-        table.add_column("Ports", min_width=16,          ratio=3)
+        table.add_column("Ports", min_width = 16,   ratio       = 3)
+        table.add_column("Risk",  width     = 12,   no_wrap     = True)
 
     table.add_column("Latency",  style=C_LATENCY,       width=10, justify="right", no_wrap=True)
 
@@ -250,8 +263,10 @@ def print_devices(devices: list["Device"], elapsed: float) -> None:
             row.append(d.mac)
             row.append(str(d.ttl) if d.ttl is not None else "-")
             row.append(_os_str(d))
+            row.append(d.device_type)
         if wide:
             row.append(_ports_str(d))
+            row.append(_risk_level_str(d.risk_score))
         row.append(lat)
         table.add_row(*row)
 
@@ -292,13 +307,13 @@ def print_nmap_result(result: "NmapResult") -> None:
         return
 
     t = Table(
-        box=box.SIMPLE, border_style="#2D3748",
-        header_style=f"bold {C_BRAND}",
-        show_lines=False, padding=(0, 1), expand=False,
+        box             = box.SIMPLE, border_style="#2D3748",
+        header_style    = f"bold {C_BRAND}",
+        show_lines      = False, padding=(0, 1), expand=False,
     )
-    t.add_column("Port",    style=C_PORT_O,  width=7,  justify="right", no_wrap=True)
-    t.add_column("Proto",   style="dim",      width=5,  no_wrap=True)
-    t.add_column("Service", style=C_SERVICE,  min_width=10)
+    t.add_column("Port",    style   = C_PORT_O,     width       = 7,  justify = "right", no_wrap = True)
+    t.add_column("Proto",   style   = "dim",        width       = 5,  no_wrap = True)
+    t.add_column("Service", style   = C_SERVICE,    min_width   = 10)
     if medium:
         t.add_column("Product", style="white",    min_width=16, ratio=2)
     if wide:
@@ -340,9 +355,9 @@ def print_nmap_summary(
     console.print()
 
     t = Table(
-        box=box.SIMPLE_HEAD, border_style="#2D3748",
-        header_style=f"bold {C_BRAND}",
-        show_lines=False, padding=(0, 1), expand=True,
+        box             = box.SIMPLE_HEAD, border_style="#2D3748",
+        header_style    = f"bold {C_BRAND}",
+        show_lines      = False, padding=(0, 1), expand=True,
     )
     t.add_column("IP",         style=C_IP,    width=15, no_wrap=True)
     if medium:
@@ -378,6 +393,136 @@ def print_nmap_summary(
             d.os_accuracy   = r.os_accuracy
             d.open_ports    = r.open_ports
             print_nmap_result(r)
+
+
+# ---------------------------------------------------------------------------
+# Risk summary panel
+# ---------------------------------------------------------------------------
+
+def print_risk_summary(devices: list["Device"]) -> None:
+    risky = sorted(
+        [d for d in devices if d.risk_score > 20],
+        key=lambda d: d.risk_score,
+        reverse=True,
+    )
+
+    if not risky:
+        console.print(Panel(
+            "[green]No devices with risk score above 20.[/]",
+            title           = f"[{C_BRAND}]Risk summary[/]",
+            border_style    = "#2D3748",
+            padding         = (0, 2),
+        ))
+        console.print()
+        return
+
+    s = "s" if len(risky) != 1 else ""
+    t = Table(
+        title           = f"[{C_BRAND}]Risk summary  --  {len(risky)} device{s} with elevated risk[/]",
+        box             = box.SIMPLE_HEAD,
+        border_style    = "#2D3748",
+        header_style    = f"bold {C_BRAND}",
+        show_lines      = False,
+        padding         = (0, 1),
+        expand          = True,
+    )
+    t.add_column("IP",     style        = C_IP,    width     = 15,      no_wrap     = True)
+    t.add_column("Name",   style        = C_HOST,  min_width = 14,      ratio       = 2)
+    t.add_column("Type",   style        = C_OS,    min_width = 14,      ratio       = 2)
+    t.add_column("Score",  width        = 7,       justify   = "right", no_wrap     = True)
+    t.add_column("Level",  width        = 10,      no_wrap   = True)
+    t.add_column("Flags",  min_width    = 20,      ratio     = 3)
+
+    for d in risky:
+        flags_str = "  |  ".join(d.risk_flags) if d.risk_flags else "-"
+        t.add_row(
+            d.ip,
+            _best_name(d),
+            d.device_type,
+            str(d.risk_score),
+            _risk_level_str(d.risk_score),
+            flags_str,
+        )
+
+    console.print()
+    console.print(t)
+    console.print()
+
+
+# ---------------------------------------------------------------------------
+# Diff report
+# ---------------------------------------------------------------------------
+
+def print_diff_result(result: "DiffResult", file_a: str, file_b: str) -> None:
+    total = (
+        len(result.new_devices)
+        + len(result.removed_devices)
+        + len(result.changed_devices)
+    )
+
+    console.print()
+    console.print(Rule(
+        f"[{C_BRAND}]Diff  --  {file_a}  vs  {file_b}  --  "
+        f"{total} difference{'s' if total != 1 else ''}[/]",
+        style="#2D3748",
+    ))
+    console.print()
+
+    if not total:
+        console.print("  [dim]No differences found between the two scans.[/]\n")
+        return
+
+    t = Table(
+        box             = box.SIMPLE_HEAD,
+        border_style    = "#2D3748",
+        header_style    = f"bold {C_BRAND}",
+        show_lines      = False,
+        padding         = (0, 1),
+        expand          = True,
+    )
+    t.add_column("Status",  width       = 9,        no_wrap     = True)
+    t.add_column("MAC",     style       = C_MAC,    width       = 17,    no_wrap = True)
+    t.add_column("IP",      style       = C_IP,     width       = 15,    no_wrap = True)
+    t.add_column("Vendor",  min_width   = 12,       ratio       = 2)
+    t.add_column("Name",    style       = C_HOST,   min_width   = 12,    ratio   = 2)
+    t.add_column("Changes", min_width   = 20,       ratio       = 3)
+
+    for d in result.new_devices:
+        t.add_row(
+            "[bold green]NEW[/]",
+            d.get("mac") or "-",
+            d.get("ip") or "-",
+            d.get("vendor") or "-",
+            d.get("device_name") or d.get("hostname") or "-",
+            "",
+        )
+
+    for d in result.removed_devices:
+        t.add_row(
+            "[bold red]REMOVED[/]",
+            d.get("mac") or "-",
+            d.get("ip") or "-",
+            d.get("vendor") or "-",
+            d.get("device_name") or d.get("hostname") or "-",
+            "",
+        )
+
+    for before, after, changes in result.changed_devices:
+        changes_str = "  ".join(
+            f"{c.field}: {c.before!r} -> {c.after!r}"
+            for c in changes
+        )
+        t.add_row(
+            "[bold yellow]CHANGED[/]",
+            after.get("mac") or "-",
+            after.get("ip") or "-",
+            after.get("vendor") or "-",
+            after.get("device_name") or after.get("hostname") or "-",
+            changes_str,
+        )
+
+    console.print(t)
+    console.print()
 
 
 # ---------------------------------------------------------------------------

@@ -161,22 +161,22 @@ def _parse_nmap_xml(xml_text: str, target_ip: str) -> NmapResult:
     ports_elem = host_elem.find("ports")
     if ports_elem is not None:
         for port_elem in ports_elem.findall("port"):
-            portid   = int(port_elem.get("portid", 0))
-            protocol = port_elem.get("protocol", "tcp")
+            portid          = int(port_elem.get("portid", 0))
+            protocol        = port_elem.get("protocol", "tcp")
 
-            state_elem  = port_elem.find("state")
-            state       = state_elem.get("state", "unknown") if state_elem is not None else "unknown"
+            state_elem      = port_elem.find("state")
+            state           = state_elem.get("state", "unknown") if state_elem is not None else "unknown"
 
-            service_elem = port_elem.find("service")
-            service  = ""
-            product  = ""
-            version  = ""
-            extra    = ""
+            service_elem    = port_elem.find("service")
+            service         = ""
+            product         = ""
+            version         = ""
+            extra           = ""
             if service_elem is not None:
-                service = service_elem.get("name", "")
-                product = service_elem.get("product", "")
-                version = service_elem.get("version", "")
-                extra   = service_elem.get("extrainfo", "")
+                service     = service_elem.get("name", "")
+                product     = service_elem.get("product", "")
+                version     = service_elem.get("version", "")
+                extra       = service_elem.get("extrainfo", "")
 
             result.ports.append(PortInfo(
                 port        = portid,

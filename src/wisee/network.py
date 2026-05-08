@@ -57,6 +57,9 @@ class Device:
     os_nmap:        str                 = ""
     os_accuracy:    int                 = 0
     open_ports:     list                = field(default_factory=list)  # list[PortInfo]
+    device_type:    str                 = "Unknown"
+    risk_score:     int                 = 0
+    risk_flags:     list[str]           = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
