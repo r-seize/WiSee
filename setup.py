@@ -1,5 +1,5 @@
 """
-setup.py — Legacy build entry point.
+setup.py - Legacy build entry point.
 
 Used for:
   uv run setup.py sdist bdist_wheel
@@ -10,8 +10,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="wisee",
-    version="0.1.2",
-    description="Local network discovery tool — ARP, mDNS, NetBIOS, UPnP, nmap",
+    version="0.1.3",
+    description="Local network discovery tool - ARP, mDNS, NetBIOS, UPnP, nmap",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="WiSee",

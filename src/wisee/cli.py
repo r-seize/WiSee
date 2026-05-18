@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-wisee.cli — Click entry point.
+wisee.cli - Click entry point.
 
 Installed as the `wisee` command via pyproject.toml / setup.py.
 
@@ -78,58 +78,58 @@ def cli():
 
 @cli.command()
 @click.option(
-    "--interface", "-i", default=None, metavar="IFACE",
-    help="Network interface (e.g. eth0, wlan0). Auto-detected if omitted.",
+    "--interface", "-i", default  = None, metavar="IFACE",
+    help                          = "Network interface (e.g. eth0, wlan0). Auto-detected if omitted.",
 )
 @click.option(
-    "--fast", "-f", is_flag=True, default=False,
-    help="Fast mode: reduced ARP timeout, enrichment disabled.",
+    "--fast", "-f", is_flag  = True, default=False,
+    help                     = "Fast mode: reduced ARP timeout, enrichment disabled.",
 )
 @click.option(
-    "--no-enrich", is_flag=True, default=False,
-    help="Disable enrichment phase (mDNS / NetBIOS / UPnP / banner).",
+    "--no-enrich", is_flag  = True, default=False,
+    help                    = "Disable enrichment phase (mDNS / NetBIOS / UPnP / banner).",
 )
 @click.option(
-    "--enrich-timeout", default=10.0, show_default=True, metavar="SECS",
-    help="Time budget per device for enrichment.",
+    "--enrich-timeout", default  = 10.0, show_default=True, metavar="SECS",
+    help                         = "Time budget per device for enrichment.",
 )
 @click.option(
-    "--nmap", "nmap_profile", default=None, metavar="PROFILE",
-    type=click.Choice(list(PROFILES.keys()), case_sensitive=False),
-    help="Run nmap after ARP+enrichment. Profiles: " + ", ".join(PROFILES.keys()),
+    "--nmap", "nmap_profile", default  = None, metavar="PROFILE",
+    type                               = click.Choice(list(PROFILES.keys()), case_sensitive=False),
+    help                               = "Run nmap after ARP+enrichment. Profiles: " + ", ".join(PROFILES.keys()),
 )
 @click.option(
-    "--nmap-timeout", default=120, show_default=True, metavar="SECS",
-    help="Per-host nmap timeout in seconds.",
+    "--nmap-timeout", default  = 120, show_default=True, metavar="SECS",
+    help                       = "Per-host nmap timeout in seconds.",
 )
 @click.option(
-    "--no-banner", is_flag=True, default=False,
-    help="Suppress the ASCII banner.",
+    "--no-banner", is_flag  = True, default=False,
+    help                    = "Suppress the ASCII banner.",
 )
 @click.option(
-    "--quiet", "-q", is_flag=True, default=False,
-    help="Quiet mode: only print the final table.",
+    "--quiet", "-q", is_flag  = True, default=False,
+    help                      = "Quiet mode: only print the final table.",
 )
 @click.option(
-    "--export", "-e", default=None, metavar="FILE",
-    type=click.Path(writable=True),
-    help="Export results to JSON or CSV (auto-detected from extension).",
+    "--export", "-e", default  = None, metavar="FILE",
+    type                       = click.Path(writable=True),
+    help                       = "Export results to JSON or CSV (auto-detected from extension).",
 )
 @click.option(
-    "--watch", "-w", is_flag=True, default=False,
-    help="Continuous mode: re-scan every --interval seconds and report changes.",
+    "--watch", "-w", is_flag  = True, default=False,
+    help                      = "Continuous mode: re-scan every --interval seconds and report changes.",
 )
 @click.option(
-    "--interval", default=30, show_default=True, metavar="SECS",
-    help="Seconds between scans in watch mode.",
+    "--interval", default  = 30, show_default=True, metavar="SECS",
+    help                   = "Seconds between scans in watch mode.",
 )
 @click.option(
-    "--watch-count", default=0, show_default=True, metavar="N",
-    help="Stop after N scans in watch mode (0 = infinite).",
+    "--watch-count", default  = 0, show_default=True, metavar="N",
+    help                      = "Stop after N scans in watch mode (0 = infinite).",
 )
 @click.option(
-    "--show-risks", is_flag=True, default=False,
-    help="Print a risk summary panel after the main table (devices with score > 20).",
+    "--show-risks", is_flag  = True, default=False,
+    help                     = "Print a risk summary panel after the main table (devices with score > 20).",
 )
 def scan(
     interface: Optional[str],
@@ -188,14 +188,14 @@ def scan(
         return
 
     devices = run_scan(
-        interface           = interface,
-        fast                = fast,
-        no_banner           = no_banner,
-        quiet               = quiet,
-        enrich              = not no_enrich,
-        enrich_timeout      = enrich_timeout,
-        nmap_profile        = nmap_profile,
-        nmap_timeout        = nmap_timeout,
+        interface       = interface,
+        fast            = fast,
+        no_banner       = no_banner,
+        quiet           = quiet,
+        enrich          = not no_enrich,
+        enrich_timeout  = enrich_timeout,
+        nmap_profile    = nmap_profile,
+        nmap_timeout    = nmap_timeout,
     )
 
     if show_risks and devices:
@@ -225,12 +225,12 @@ def interfaces():
     ifaces = get_if_list()
 
     t = Table(
-        title=f"[{C_BRAND}]Available network interfaces[/]",
-        box=box.SIMPLE_HEAD,
-        border_style="#2D3748",
-        header_style=f"bold {C_BRAND}",
-        padding=(0, 1),
-        expand=False,
+        title         = f"[{C_BRAND}]Available network interfaces[/]",
+        box           = box.SIMPLE_HEAD,
+        border_style  = "#2D3748",
+        header_style  = f"bold {C_BRAND}",
+        padding       = (0, 1),
+        expand        = False,
     )
     t.add_column("Interface",  style=C_IP,        min_width=12)
     t.add_column("IP address", style="#68D391",   min_width=15)
@@ -239,10 +239,10 @@ def interfaces():
 
     for iface in ifaces:
         try:
-            ip              = get_if_addr(iface) or "-"
-            mac             = (get_if_hwaddr(iface) or "-").upper()
-            status          = "up" if ip and ip != "0.0.0.0" else "down"
-            status_str      = f"[green]{status}[/]" if status == "up" else f"[dim]{status}[/]"
+            ip          = get_if_addr(iface) or "-"
+            mac         = (get_if_hwaddr(iface) or "-").upper()
+            status      = "up" if ip and ip != "0.0.0.0" else "down"
+            status_str  = f"[green]{status}[/]" if status == "up" else f"[dim]{status}[/]"
         except Exception:
             ip, mac, status_str = "-", "-", "[dim]?[/]"
         t.add_row(iface, ip, mac, status_str)
@@ -263,12 +263,12 @@ def profiles():
     print_banner(__version__)
 
     t = Table(
-        title=f"[{C_BRAND}]Nmap scan profiles[/]",
-        box=box.SIMPLE_HEAD,
-        border_style="#2D3748",
-        header_style=f"bold {C_BRAND}",
-        padding=(0, 1),
-        expand=False,
+        title         = f"[{C_BRAND}]Nmap scan profiles[/]",
+        box           = box.SIMPLE_HEAD,
+        border_style  = "#2D3748",
+        header_style  = f"bold {C_BRAND}",
+        padding       = (0, 1),
+        expand        = False,
     )
     t.add_column("Profile",     style=C_OS,       min_width=10)
     t.add_column("Description", style="white",    min_width=40)
@@ -300,8 +300,8 @@ def profiles():
 
 
 def _export_results(devices, filepath: str) -> None:
-    path = Path(filepath)
-    ext  = path.suffix.lower()
+    path  = Path(filepath)
+    ext   = path.suffix.lower()
 
     if ext == ".csv":
         rows = [
@@ -387,9 +387,9 @@ def _export_diff(result, filepath: str) -> None:
 @click.argument("scan_a", metavar="SCAN_A", type=click.Path(exists=True, readable=True))
 @click.argument("scan_b", metavar="SCAN_B", type=click.Path(exists=True, readable=True))
 @click.option(
-    "--export", "-e", default=None, metavar="FILE",
-    type=click.Path(writable=True),
-    help="Export the diff report to JSON.",
+    "--export", "-e", default  = None, metavar="FILE",
+    type                       = click.Path(writable=True),
+    help                       = "Export the diff report to JSON.",
 )
 def diff(scan_a: str, scan_b: str, export: Optional[str]):
     """
@@ -409,8 +409,8 @@ def diff(scan_a: str, scan_b: str, export: Optional[str]):
     from wisee.diff import load_scan, compute_diff
 
     try:
-        data_a = load_scan(scan_a)
-        data_b = load_scan(scan_b)
+        data_a  = load_scan(scan_a)
+        data_b  = load_scan(scan_b)
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as exc:
         print_error(str(exc))
         sys.exit(1)

@@ -8,7 +8,7 @@
  ╚███╔███╔╝██║███████║███████╗███████╗
   ╚══╝╚══╝ ╚═╝╚══════╝╚══════╝╚══════╝
 ```
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/r-seize/wisee/releases)
+[![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)](https://github.com/r-seize/wisee/releases)
 [![Python](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-GPL-orange.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)]()
@@ -34,13 +34,13 @@ sudo ln -sf ~/.local/bin/wisee /usr/local/bin/wisee
 Download the latest `.deb` from [Releases](https://github.com/r-seize/wisee/releases):
 
 ```bash
-sudo dpkg -i wisee_0.1.2_all.deb
+sudo dpkg -i wisee_0.1.3_all.deb
 ```
 
 ### tar.gz / pip
 
 ```bash
-pip install https://github.com/r-seize/wisee/releases/download/v0.1.2/wisee-0.1.2.tar.gz
+pip install https://github.com/r-seize/wisee/releases/download/v0.1.3/wisee-0.1.3.tar.gz
 ```
 
 ### From source
@@ -80,11 +80,11 @@ wisee --help
 
 | Phase | What it does |
 |-------|-------------|
-| **1 — ARP** | Broadcast ARP → device list with MAC, vendor, TTL, latency |
-| **2 — Enrichment** | mDNS · NetBIOS · UPnP · HTTP/SSH banner → device names |
-| **3 — Nmap** | Port scan + service detection + OS fingerprint (optional) |
-| **Post — Classify** | Heuristic device type from vendor / ports / TTL |
-| **Post — Risk score** | Additive security risk score (0-100) with named flags |
+| **1 - ARP** | Broadcast ARP → device list with MAC, vendor, TTL, latency |
+| **2 - Enrichment** | mDNS · NetBIOS · UPnP · HTTP/SSH banner → device names |
+| **3 - Nmap** | Port scan + service detection + OS fingerprint (optional) |
+| **Post - Classify** | Heuristic device type from vendor / ports / TTL |
+| **Post - Risk score** | Additive security risk score (0-100) with named flags |
 
 ## Device types
 
@@ -121,9 +121,9 @@ sudo wisee scan --watch --watch-count 10 # stop after 10 scans
 ```
 
 Each cycle shows the full scan table, then a diff against the previous scan:
-- **NEW** — device appeared since the last scan
-- **GONE** — device disappeared
-- **CHANGED** — open ports or device name changed
+- **NEW** - device appeared since the last scan
+- **GONE** - device disappeared
+- **CHANGED** - open ports or device name changed
 
 ## Diff command
 

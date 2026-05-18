@@ -1,9 +1,9 @@
 #!/bin/bash
-# build_deb.sh — Build a .deb package for WiSee
+# build_deb.sh - Build a .deb package for WiSee
 # Usage: bash build_deb.sh
 set -e
 
-VERSION="0.1.2"
+VERSION="0.1.3"
 PACKAGE_NAME="wisee"
 BUILD_DIR="deb_dist/${PACKAGE_NAME}_${VERSION}_all"
 INSTALL_PREFIX="/usr/local"
@@ -56,7 +56,7 @@ Description: Local network discovery tool
  Usage: sudo wisee scan
 EOF
 
-# DEBIAN/postinst — install Python dependencies after package install
+# DEBIAN/postinst - install Python dependencies after package install
 cat > "${BUILD_DIR}/DEBIAN/postinst" <<'EOF'
 #!/bin/bash
 set -e

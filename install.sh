@@ -5,7 +5,7 @@ REPO="https://github.com/r-seize/wisee.git"
 SYMLINK="/usr/local/bin/wisee"
 
 echo ""
-echo "  WiSee — installer"
+echo "  WiSee - installer"
 echo "  =================="
 echo ""
 

@@ -1,5 +1,5 @@
 """
-core.py — Three-phase scan pipeline.
+core.py - Three-phase scan pipeline.
 
   Phase 1 : ARP broadcast   -> device list (+ TTL + MAC randomization)
   Phase 2 : Enrichment      -> mDNS / NetBIOS / UPnP / banner
@@ -68,7 +68,7 @@ def run_scan(
     start = time.perf_counter()
 
     # =========================================================================
-    # Phase 1 — ARP  (+TTL, MAC randomization, vendor from vendors_db)
+    # Phase 1 - ARP  (+TTL, MAC randomization, vendor from vendors_db)
     # =========================================================================
     devices: list[Device]   = []
     phases                  = sum([1, enrich and not fast, bool(nmap_profile)])
@@ -105,7 +105,7 @@ def run_scan(
         return []
 
     # =========================================================================
-    # Phase 2 — Enrichment
+    # Phase 2 - Enrichment
     # =========================================================================
     if enrich and not fast:
         p2, p2_task = make_enrichment_progress(len(devices))
@@ -133,7 +133,7 @@ def run_scan(
     arp_elapsed = time.perf_counter() - start
 
     # =========================================================================
-    # Phase 3 — Nmap
+    # Phase 3 - Nmap
     # =========================================================================
     nmap_results: dict[str, NmapResult] = {}
 
@@ -184,7 +184,7 @@ def run_scan(
             device.risk_score, device.risk_flags = score_device(device)
 
     # =========================================================================
-    # Display — one final table with everything merged in
+    # Display - one final table with everything merged in
     # =========================================================================
     total_elapsed = time.perf_counter() - start
 

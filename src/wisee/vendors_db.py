@@ -1,5 +1,5 @@
 """
-vendors_db.py — OUI vendor database.
+vendors_db.py - OUI vendor database.
 
 Auto-generated
 Generated : 2026-02-24
@@ -13608,7 +13608,7 @@ VENDOR_DB: dict[str, str] = {
     "08:08:EA": "AMSC",
     "08:09:B6": "Masimo",
     "08:09:C7": "Zhuhai Unitech Power Technology",
-    "08:0A:4E": "Planet Bingo® — 3rd Rock Gaming®",
+    "08:0A:4E": "Planet Bingo® - 3rd Rock Gaming®",
     "08:0C:0B": "SysMik GmbH Dresden",
     "08:0C:C9": "Mission Technology Group, dba Magma",
     "08:0D:84": "Geco,",

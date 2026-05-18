@@ -1,12 +1,12 @@
 """
-Device enrichment — runs multiple identification techniques in parallel
+Device enrichment - runs multiple identification techniques in parallel
 to find device names beyond what ARP + reverse DNS provides.
 
 Techniques:
-  1. mDNS/Bonjour   — multicast DNS, devices announce themselves on .local
-  2. NetBIOS/NBNS   — Windows/Samba broadcast name service
-  3. SSDP/UPnP      — router, TV, NAS announce friendly name + model
-  4. Banner grab    — HTTP/HTTPS/SSH headers often contain device name
+  1. mDNS/Bonjour   - multicast DNS, devices announce themselves on .local
+  2. NetBIOS/NBNS   - Windows/Samba broadcast name service
+  3. SSDP/UPnP      - router, TV, NAS announce friendly name + model
+  4. Banner grab    - HTTP/HTTPS/SSH headers often contain device name
 """
 
 import asyncio
@@ -78,7 +78,7 @@ def _mdns_query(ip: str, timeout: float = 2.0) -> Optional[str]:
         data, _ = sock.recvfrom(1024)
         sock.close()
 
-        # Parse the answer section — look for a printable name
+        # Parse the answer section - look for a printable name
         # Skip header (12 bytes) + question section
         offset = 12
         # Skip question name
@@ -93,7 +93,7 @@ def _mdns_query(ip: str, timeout: float = 2.0) -> Optional[str]:
 
         if offset + 10 < len(data):
             # Skip answer name, type, class, ttl, rdlength
-            # We just look for printable ASCII segments — hostname heuristic
+            # We just look for printable ASCII segments - hostname heuristic
             raw         = data[offset:]
             parts       = []
             i           = 0

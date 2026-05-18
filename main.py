@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-WiSee — Local network discovery tool.
+WiSee - Local network discovery tool.
 
 Usage:
   sudo $(which uv) run main.py scan

@@ -1,5 +1,5 @@
 """
-display.py — All Rich rendering.
+display.py - All Rich rendering.
 
 Responsive: adapts columns to terminal width.
 No emoji. English only.
@@ -82,7 +82,7 @@ def _is_medium() -> bool:
 # Banner & config panel
 # ---------------------------------------------------------------------------
 
-def print_banner(version: str = "0.1.2") -> None:
+def print_banner(version: str = "0.1.3") -> None:
     console.print(Align.center(Text(BANNER, style="bold #00D4FF")))
     console.print(Align.center(Text(
         f"  Network discovery tool  |  v{version}  |  WiSee by r-seize\n",

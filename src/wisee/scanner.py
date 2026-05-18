@@ -1,8 +1,8 @@
 """
-scanner.py — Deep recon via nmap.
+scanner.py - Deep recon via nmap.
 
 Runs nmap with increasing aggression depending on the chosen profile:
-  quick   : -sn (ping sweep, already done via ARP — used for compatibility)
+  quick   : -sn (ping sweep, already done via ARP - used for compatibility)
   ports   : -sS -T4 --top-ports 100   (top 100 TCP ports, fast)
   full    : -sS -sV -T4 -p 1-65535    (all TCP ports + service versions)
   os      : -sS -sV -O -T4 --top-ports 500  (service + OS detection)
@@ -66,26 +66,26 @@ class NmapResult:
 
 PROFILES: dict[str, dict] = {
     "quick": {
-        "label": "Quick  — top 100 ports, no version",
+        "label": "Quick  - top 100 ports, no version",
         "args":  ["-sS", "-T4", "--top-ports", "100", "--open"],
     },
     "ports": {
-        "label": "Ports  — top 500 ports + service versions",
+        "label": "Ports  - top 500 ports + service versions",
         "args":  ["-sS", "-sV", "-T4", "--top-ports", "500", "--open",
                   "--version-intensity", "3"],
     },
     "full": {
-        "label": "Full   — all 65535 TCP ports + service versions",
+        "label": "Full   - all 65535 TCP ports + service versions",
         "args":  ["-sS", "-sV", "-T4", "-p", "1-65535", "--open",
                   "--version-intensity", "5"],
     },
     "os": {
-        "label": "OS     — top 500 ports + service + OS detection",
+        "label": "OS     - top 500 ports + service + OS detection",
         "args":  ["-sS", "-sV", "-O", "-T4", "--top-ports", "500", "--open",
                   "--version-intensity", "5", "--osscan-guess"],
     },
     "stealth": {
-        "label": "Stealth — top 200 ports, slow timing (T2)",
+        "label": "Stealth - top 200 ports, slow timing (T2)",
         "args":  ["-sS", "-T2", "--top-ports", "200", "--open"],
     },
 }
@@ -114,7 +114,7 @@ def _run_nmap(target: str, extra_args: list[str], timeout: int = 120) -> tuple[s
     except subprocess.TimeoutExpired:
         return "", "nmap timed out"
     except FileNotFoundError:
-        return "", "nmap not found — install it: sudo apt install nmap"
+        return "", "nmap not found - install it: sudo apt install nmap"
     except Exception as exc:
         return "", str(exc)
 

@@ -1,5 +1,5 @@
 """
-network.py — ARP scanning, TTL capture, and network helpers.
+network.py - ARP scanning, TTL capture, and network helpers.
 """
 
 import socket
